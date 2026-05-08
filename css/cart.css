@@ -1,0 +1,115 @@
+/* ============================================================
+   CART PANEL — CREAFIT
+   ============================================================ */
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .75);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.overlay.on { opacity: 1; pointer-events: all; }
+
+/* Cart panel */
+.cpanel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(400px, 95vw);
+  background: var(--ink2);
+  border-left: 1px solid var(--wire2);
+  z-index: 201;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .38s var(--ease);
+}
+.cpanel.on { transform: translateX(0); }
+
+/* Header */
+.cph {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.4rem 1.5rem;
+  border-bottom: 1px solid var(--wire);
+}
+.cph h2 { font-family: var(--D); font-size: 1.7rem; letter-spacing: 2px; text-transform: uppercase; }
+.cpclose {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1.3rem;
+  padding: .3rem;
+  border-radius: var(--r);
+  transition: color .2s, background .2s;
+}
+.cpclose:hover { color: var(--white); background: var(--ink3); }
+
+/* Items list */
+.cpitems { flex: 1; overflow-y: auto; padding: 1.2rem 1.5rem; }
+.cpempty {
+  text-align: center;
+  padding: 3rem 1rem;
+  font-family: var(--C);
+  font-size: .85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cpempty svg { margin: 0 auto 1rem; opacity: .2; }
+
+/* Single item */
+.citem {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: .9rem;
+  align-items: center;
+  padding: .9rem 0;
+  border-bottom: 1px solid var(--wire);
+}
+.cimg {
+  width: 56px;
+  height: 56px;
+  background: var(--ink3);
+  border-radius: var(--r);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  overflow: hidden;
+}
+.cimg img   { width: 100%; height: 100%; object-fit: cover; }
+.cname      { font-family: var(--C); font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: .5px; margin-bottom: .15rem; }
+.cprice     { font-size: .78rem; color: var(--lime); font-weight: 500; }
+.crm        { background: none; border: none; color: var(--muted); cursor: pointer; padding: .25rem; transition: color .2s; font-size: 1rem; }
+.crm:hover  { color: #ff5555; }
+
+/* Footer */
+.cpfoot   { padding: 1.4rem 1.5rem; border-top: 1px solid var(--wire); }
+.cptrow   { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.2rem; }
+.cptlbl   { font-family: var(--C); font-size: .7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
+.cptamt   { font-family: var(--D); font-size: 2.2rem; }
+
+.btn-co {
+  width: 100%;
+  background: var(--lime);
+  color: #000;
+  border: none;
+  border-radius: var(--r);
+  padding: 1rem;
+  font-family: var(--D);
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .2s, transform .2s;
+}
+.btn-co:hover { background: var(--lime2); transform: translateY(-1px); }
