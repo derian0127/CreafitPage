@@ -25,5 +25,13 @@
 .bottom { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; padding-top: 2rem; border-top: 1px solid var(--wire); font-size: .72rem; color: var(--muted); }
 .bottom span { color: var(--lime); }
 
+.a11yLink {
+  background: none; border: none; color: var(--lime);
+  font-family: var(--C); font-size: .65rem; letter-spacing: 1.5px;
+  text-transform: uppercase; text-decoration: underline; cursor: pointer;
+  padding: 0;
+}
+.a11yLink:hover { color: var(--lime2); }
+
 @media (max-width: 860px) { .grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 520px)  { .grid { grid-template-columns: 1fr; } .bottom { flex-direction: column; text-align: center; } }

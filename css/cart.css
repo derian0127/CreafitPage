@@ -87,8 +87,34 @@
   overflow: hidden;
 }
 .cimg img   { width: 100%; height: 100%; object-fit: cover; }
-.cname      { font-family: var(--C); font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: .5px; margin-bottom: .15rem; }
+
+.ci-info    { display: flex; flex-direction: column; gap: .25rem; }
+.cname      { font-family: var(--C); font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: .5px; }
 .cprice     { font-size: .78rem; color: var(--lime); font-weight: 500; }
+
+.cqty-ctrl {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  margin-top: .2rem;
+}
+.cqty-ctrl button {
+  background: var(--ink3);
+  border: 1px solid var(--wire);
+  color: var(--white);
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: background .2s;
+}
+.cqty-ctrl button:hover { background: var(--wire); }
+.cqty-ctrl span { font-family: var(--B); font-size: .85rem; color: var(--muted); min-width: 14px; text-align: center; }
+
 .crm        { background: none; border: none; color: var(--muted); cursor: pointer; padding: .25rem; transition: color .2s; font-size: 1rem; }
 .crm:hover  { color: #ff5555; }
 

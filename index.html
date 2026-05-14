@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- Mismo número que VITE_WHATSAPP_NUMBER en Creafit/.env -->
+  <meta name="creafit-whatsapp" content="573001557404"/>
   <title>CREAFIT — Rendimiento Sin Límites</title>
 
   <!-- Google Fonts -->
@@ -352,12 +354,26 @@
       <span class="cptlbl">Total</span>
       <span class="cptamt" id="cptotal">$0</span>
     </div>
-    <button class="btn-co" onclick="checkout()">Proceder al Pago →</button>
+    <button type="button" class="btn-co" onclick="checkout()">Pagar ahora</button>
   </div>
 </aside>
 
 <!-- ═══════════════════════════ TOAST ═════════════════════════ -->
 <div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════ FLOAT ACTIONS ═════════════════════ -->
+<div class="float-btns">
+  <button class="fbtn ftop" id="ftop" onclick="scrollToTop()" aria-label="Volver arriba">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"/>
+    </svg>
+  </button>
+  <button class="fbtn fwa" onclick="openWhatsApp()" aria-label="Contactar por WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-11.7c.9 0 1.8.2 2.6.6l4.4-1.2-1.2 4.4a8.38 8.38 0 0 1 .7 4.1Z"/>
+    </svg>
+  </button>
+</div>
 
 <!-- ═══════════════════════════ JS ════════════════════════════ -->
 <script src="js/main.js"></script>

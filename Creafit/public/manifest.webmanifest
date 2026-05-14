@@ -1,0 +1,18 @@
+{
+  "name": "CREAFIT",
+  "short_name": "CREAFIT",
+  "description": "Rendimiento sin límites — suplementación deportiva.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#c9e82e",
+  "lang": "es-CO",
+  "icons": [
+    {
+      "src": "/icons.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

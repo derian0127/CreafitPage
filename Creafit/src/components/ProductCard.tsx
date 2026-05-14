@@ -1,6 +1,10 @@
 import { useRef } from 'react';
 import { useCartStore, cop } from '../store/cartStore';
-import type { Product } from '../data/products';
+import {
+  productImageUrls,
+  TAG_LABELS,
+  type Product,
+} from '../data/products';
 import { Link } from 'react-router-dom';
 import styles from './ProductCard.module.css';
 
@@ -20,8 +24,10 @@ const ImgPlaceholder = () => (
 export default function ProductCard({ product, index }: Props) {
   const { addItem } = useCartStore();
   const ref = useRef<HTMLDivElement>(null);
+  const imgs = productImageUrls(product);
+  const mainImg = imgs[0];
 
-  const handleAdd = () => addItem(product.name, product.price, product.image);
+  const handleAdd = () => addItem(product.name, product.price, mainImg);
 
   return (
     <div className={styles.card} ref={ref}>
@@ -32,9 +38,11 @@ export default function ProductCard({ product, index }: Props) {
         </span>
       )}
       <Link to={`/product/${product.id}`} className={styles.img}>
-        {product.image
-          ? <img src={product.image} alt={product.name} />
-          : <ImgPlaceholder />}
+        {mainImg ? (
+          <img src={mainImg} alt={product.name} />
+        ) : (
+          <ImgPlaceholder />
+        )}
         <div className={styles.overlay}>
           <button className={styles.quickAdd} onClick={(e) => { e.preventDefault(); handleAdd(); }}>
             + Añadir al carrito
@@ -43,6 +51,15 @@ export default function ProductCard({ product, index }: Props) {
       </Link>
       <div className={styles.body}>
         <Link to={`/product/${product.id}`} className={styles.name}>{product.name}</Link>
+        {product.tags && product.tags.length > 0 && (
+          <div className={styles.tags} aria-label="Etiquetas del producto">
+            {product.tags.map((t) => (
+              <span key={t} className={styles.tag}>
+                {TAG_LABELS[t]}
+              </span>
+            ))}
+          </div>
+        )}
         <p className={styles.desc}>{product.desc}</p>
         <div className={styles.foot}>
           <div className={styles.price}>

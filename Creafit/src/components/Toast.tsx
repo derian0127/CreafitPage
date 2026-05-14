@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { setToastListener } from '../lib/toastBus';
 import styles from './Toast.module.css';
-
-// Simple global toast trigger
-let _show: ((msg: string) => void) | null = null;
-export const showToast = (msg: string) => _show?.(msg);
 
 export default function Toast() {
   const [msg, setMsg]     = useState('');
@@ -11,13 +8,16 @@ export default function Toast() {
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
-    _show = (m: string) => {
+    setToastListener((m: string) => {
       setMsg(m);
       setVisible(true);
       clearTimeout(timer.current);
       timer.current = setTimeout(() => setVisible(false), 2600);
+    });
+    return () => {
+      clearTimeout(timer.current);
+      setToastListener(null);
     };
-    return () => { _show = null; };
   }, []);
 
   return (

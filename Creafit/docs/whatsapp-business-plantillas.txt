@@ -1,0 +1,30 @@
+CREAFIT — Plantillas sugeridas para WhatsApp Business
+=====================================================
+Puedes pegar esto en WhatsApp Business → Herramientas → Respuestas rápidas / Mensajes de ausencia.
+Ajusta montos, horarios y ciudad.
+
+--- Saludo + pedido de datos (respuesta rápida: /hola) ---
+¡Hola! Gracias por escribir a CREAFIT 👋
+Para armar tu pedido necesito:
+• Ciudad y dirección (o punto de entrega)
+• Productos y cantidades
+• Método de pago preferido (transferencia / …)
+
+Te confirmo disponibilidad y total en segundos.
+
+--- Cierre de venta (respuesta rápida: /total) ---
+Tu total hoy es: $________ COP
+Incluye envío: Sí / No
+Datos para pago: [completa]
+Cuando tengamos el comprobante coordinamos entrega. ¡Gracias por confiar!
+
+--- Seguimiento post-pago (respuesta rápida: /envio) ---
+¡Listo! Tu pedido va en camino.
+Número de guía / mensajero: ________
+Tiempo estimado: ________
+Cualquier duda, escríbenos aquí.
+
+--- Fuera de horario (mensaje de ausencia) ---
+Hola, en este momento estamos fuera de horario.
+Te respondemos de ______ a ______ en días hábiles.
+Deja tu pedido por escrito y lo gestionamos al abrir.

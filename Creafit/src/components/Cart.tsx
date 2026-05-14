@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
-import { useCartStore, cop } from '../store/cartStore';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCartStore, cop } from '../store/cartStore';
+import { openWhatsAppOrder } from '../lib/whatsappCheckout';
 import styles from './Cart.module.css';
 
 export default function Cart() {
@@ -12,9 +13,7 @@ export default function Cart() {
   const cartTotal  = useCartStore(s => s.items.reduce((sum, i) => sum + i.price * i.qty, 0));
   const cartCount  = useCartStore(s => s.items.reduce((sum, i) => sum + i.qty, 0));
   const navigate   = useNavigate();
-
-
-  // Lock body scroll when open
+  const [orderNotes, setOrderNotes] = useState('');
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -24,6 +23,16 @@ export default function Cart() {
     <>
       <div className={`${styles.overlay} ${isOpen ? styles.on : ''}`} onClick={closeCart} />
       <aside className={`${styles.panel} ${isOpen ? styles.on : ''}`} aria-label="Carrito de compras">
+        <div
+          className="sr-only"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {items.length === 0
+            ? 'Carrito vacío.'
+            : `${cartCount} artículos en el carrito. Total ${cop(cartTotal)}.`}
+        </div>
         <div className={styles.header}>
           <h2>Tu Carrito <span className={styles.countBadge}>{cartCount}</span></h2>
           <button className={styles.close} onClick={closeCart} aria-label="Cerrar carrito">✕</button>
@@ -68,16 +77,47 @@ export default function Cart() {
             <span className={styles.totalLbl}>Total</span>
             <span className={styles.totalAmt}>{cop(cartTotal)}</span>
           </div>
-          <button
-            className={styles.checkout}
+          <label className={styles.notesLabel} htmlFor="cart-order-notes">Notas (opcional)</label>
+          <textarea
+            id="cart-order-notes"
+            className={styles.notesArea}
+            value={orderNotes}
+            onChange={(e) => setOrderNotes(e.target.value)}
+            placeholder="Horario, dirección, etc."
+            maxLength={500}
+            rows={2}
             disabled={items.length === 0}
-            onClick={() => {
-              closeCart();
-              navigate('/checkout');
-            }}
-          >
-            Proceder al Pago →
-          </button>
+          />
+          <div className={styles.actions}>
+            <button
+              type="button"
+              className={styles.waBtn}
+              disabled={items.length === 0}
+              onClick={() =>
+                openWhatsAppOrder(items, {
+                  source: 'cart-drawer',
+                  notes: orderNotes,
+                  afterOpen: () => {
+                    closeCart();
+                    navigate('/gracias');
+                  },
+                })
+              }
+            >
+              Pagar por WhatsApp
+            </button>
+            {/* <button
+              type="button"
+              className={styles.checkout}
+              disabled={items.length === 0}
+              onClick={() => {
+                closeCart();
+                navigate('/checkout');
+              }}
+            >
+              Ir al checkout →
+            </button> */}
+          </div>
         </div>
       </aside>
     </>

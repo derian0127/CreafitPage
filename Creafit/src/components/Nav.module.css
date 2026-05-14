@@ -19,7 +19,19 @@
 .links a       { color: var(--muted); transition: color .2s; }
 .links a:hover { color: var(--lime); }
 
-.right { display: flex; align-items: center; gap: .75rem; }
+.right { display: flex; align-items: center; gap: .5rem; }
+
+.a11yBtn {
+  display: inline-flex;
+  align-items: center;
+  background: none; border: 1px solid var(--wire2); color: var(--muted);
+  cursor: pointer; font-family: var(--C); font-size: .58rem; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  padding: .42rem .5rem; border-radius: var(--r);
+  transition: border-color .2s, color .2s;
+}
+.a11yBtn:hover { border-color: var(--lime); color: var(--lime); }
+.a11yOn { border-color: var(--lime); color: var(--lime); }
 
 .cartBtn {
   position: relative; background: none; border: 1px solid var(--wire2);

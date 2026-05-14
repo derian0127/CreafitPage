@@ -37,9 +37,52 @@ img { display: block; max-width: 100%; }
 ul  { list-style: none; }
 button { font-family: inherit; }
 
+:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 3px;
+}
+
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 ::-webkit-scrollbar       { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--ink2); }
 ::-webkit-scrollbar-thumb { background: var(--lime); border-radius: 2px; }
+
+/* Contraste reforzado (toggle en la barra de navegación) */
+html[data-high-contrast='true'] {
+  --wire: rgba(255, 255, 255, 0.14);
+  --wire2: rgba(255, 255, 255, 0.24);
+  --muted: #a8a89e;
+}
+
+html[data-high-contrast='true'] body::after {
+  opacity: 0.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
 body::after {
   content: '';

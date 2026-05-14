@@ -1,5 +1,8 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
+import { showToast } from '../lib/toastBus';
+import { toggleHighContrast } from '../lib/highContrast';
 
 const LINKS_PRODUCTS = ['Proteínas','Creatinas','Pre-entreno','Aminoácidos','Vitaminas'];
 const LINKS_INFO     = ['Sobre CREAFIT','Blog & Ciencia','Privacidad','Devoluciones','Términos'];
@@ -10,8 +13,24 @@ export default function Footer() {
 
   const subscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.includes('@')) return;
-    alert(`Suscrito: ${email}`);
+    if (!email.includes('@')) {
+      showToast('Email inválido.');
+      return;
+    }
+    const formUrl = import.meta.env.VITE_NEWSLETTER_FORM_URL as string | undefined;
+    const contactEmail = import.meta.env.VITE_CONTACT_EMAIL as string | undefined;
+
+    if (formUrl?.trim()) {
+      window.open(formUrl.trim(), '_blank', 'noopener,noreferrer');
+      showToast('Te abrimos el formulario de suscripción.');
+    } else if (contactEmail?.trim()) {
+      const subj = encodeURIComponent('Newsletter CREAFIT');
+      const body = encodeURIComponent(`Quiero suscribirme con este correo: ${email}`);
+      window.location.href = `mailto:${contactEmail.trim()}?subject=${subj}&body=${body}`;
+      showToast('Abriendo tu app de correo…');
+    } else {
+      showToast(`Gracias. Registramos: <strong>${email}</strong> (configura VITE_NEWSLETTER_FORM_URL o VITE_CONTACT_EMAIL para envío real).`);
+    }
     setEmail('');
   };
 
@@ -28,11 +47,19 @@ export default function Footer() {
         </div>
         <div className={styles.col}>
           <h4>Productos</h4>
-          <ul>{LINKS_PRODUCTS.map(l => <li key={l}><a href="#">{l}</a></li>)}</ul>
+          <ul>
+            <li><Link to="/catalog">Ver catálogo</Link></li>
+            {LINKS_PRODUCTS.map(l => <li key={l}><a href="#">{l}</a></li>)}
+          </ul>
         </div>
         <div className={styles.col}>
           <h4>Información</h4>
-          <ul>{LINKS_INFO.map(l => <li key={l}><a href="#">{l}</a></li>)}</ul>
+          <ul>
+            <li><Link to="/catalog">Catálogo</Link></li>
+            <li><Link to="/envios-pagos">Envíos y pagos</Link></li>
+            <li><Link to="/autenticidad">Autenticidad</Link></li>
+            {LINKS_INFO.map(l => <li key={l}><a href="#">{l}</a></li>)}
+          </ul>
         </div>
         <div className={styles.col}>
           <h4>Newsletter</h4>
@@ -50,6 +77,16 @@ export default function Footer() {
       <div className={styles.bottom}>
         <p>© 2025 <span>CREAFIT</span>. Todos los derechos reservados.</p>
         <p>Hecho para atletas que van en serio</p>
+        <button
+          type="button"
+          className={styles.a11yLink}
+          onClick={() => {
+            const on = toggleHighContrast();
+            showToast(on ? 'Contraste alto activado.' : 'Contraste estándar.');
+          }}
+        >
+          Contraste alto
+        </button>
       </div>
     </footer>
   );

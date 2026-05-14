@@ -1,0 +1,104 @@
+1. Botón flotante de WhatsApp (FloatingWhatsApp.tsx)
+Es un <button> fijo (esquina inferior derecha; en móvil sube un poco para no tapar el carrito).
+Al hacer clic llama a openWhatsAppConsult() en whatsappCheckout.ts, que arma una URL wa.me con un mensaje corto de consulta y utm_campaign=float-btn.
+Idea clave: no usa el carrito; solo abre WhatsApp como el botón verde de la landing estática.
+
+
+2. Notas en el pedido (carrito, checkout y gracias)
+buildOrderMessage ahora acepta un tercer argumento opcional notes. Si hay texto, se añade un bloque “Notas / comentarios” antes de la línea de UTM.
+openWhatsAppOrder(..., { notes }) guarda esas notas en sessionStorage (creafit_last_order_notes) para que la página /gracias pueda rellenar el textarea al entrar (useState(() => getLastOrderNotesFromStorage())).
+Por qué sessionStorage: vive solo en esa pestaña y se borra al cerrarla; sirve para “reintentar WhatsApp” sin backend. Si el usuario borra notas y paga, se quita la clave.
+
+
+3. Indicador “Guardado” (CartSaveIndicator.tsx)
+El carrito ya se persiste con Zustand + persist en localStorage.
+Este componente se suscribe al store: cuando items cambia después de la rehidratación, muestra el pill “Guardado” unos segundos.
+Usa onFinishHydration para fijar una línea base del JSON del carrito y no disparar el aviso en la primera carga “fantasma” antes de leer localStorage.
+
+
+4. Compartir producto (ProductDetails.tsx)
+Botón “Compartir enlace” arma una URL con UTM (utm_source=share&utm_medium=product&utm_campaign=user) para que en analítica sepas de dónde vino el tráfico.
+Flujo: si el navegador tiene navigator.share (móvil sobre todo), abre el selector nativo; si no, intenta navigator.clipboard.writeText; si falla, un toast te pide copiar manualmente.
+Aprendizaje: la Web Share API requiere contexto seguro (HTTPS) y a veces gesto de usuario; por eso hay fallbacks.
+
+
+5. Contraste alto + movimiento reducido
+highContrast.ts: pone o quita data-high-contrast="true" en <html> y sincroniza localStorage (creafit-high-contrast). Emite el evento personalizado creafit-contrast-change para que la Nav actualice el estado del botón si cambias contraste desde el footer.
+index.css: con ese data-attribute se redefinen variables (--wire, --muted, etc.) y se atenúa el grano de body::after.
+@media (prefers-reduced-motion: reduce): acorta animaciones y transiciones para quien lo pide en el sistema operativo (accesibilidad).
+main.tsx: antes de montar React, si en localStorage había 1, llama a setHighContrast(true) para que no “parpadee” el tema.
+
+
+6. Newsletter “real” (Footer.tsx)
+Orden de prioridad: VITE_NEWSLETTER_FORM_URL → abre esa URL en pestaña nueva (Google Forms, Tally, etc.).
+Si no hay URL pero sí VITE_CONTACT_EMAIL → abre mailto: con asunto/cuerpo preparados.
+Si no hay ninguno → toast explicando que falta configuración (modo demo).
+showToast viene de toastBus.ts (mensaje global sin alert).
+
+
+7. robots.txt y sitemap.xml
+public/robots.txt: lo sirve Vite en desarrollo (muy mínimo: permite todo).
+En pnpm build, un plugin en vite.config.ts (closeBundle) escribe en dist/sitemap.xml y dist/robots.txt con URLs absolutas usando VITE_SITE_URL (por defecto https://example.com hasta que pongas tu dominio en .env).
+Incluye rutas principales y /product/1 … /product/7 alineadas con tu catálogo actual.
+Idea: los buscadores leen robots.txt, siguen el enlace al sitemap y descubren URLs. Sin dominio real en .env, el sitemap es solo plantilla hasta que lo cambies.
+
+
+
+8. Meta de producto (ya lo tenías; recordatorio)
+productMeta.ts actualiza <title> y meta OG en el navegador cuando entras a un producto.
+Limitación didáctica: muchos bots de redes no ejecutan JavaScript; para previews perfectas en WhatsApp/Telegram a veces hace falta HTML pre-renderizado en el servidor. Para usuarios que ya están en la web, esto mejora pestaña y compartir desde el propio navegador.
+Variables nuevas (.env.example)
+VITE_SITE_URL — sitemap/robots en build.
+VITE_NEWSLETTER_FORM_URL / VITE_CONTACT_EMAIL — newsletter.
+Las que ya tenías (VITE_WHATSAPP_NUMBER) siguen igual.
+Archivos tocados (referencia rápida)
+Nuevos: FloatingWhatsApp.*, CartSaveIndicator.*, lib/highContrast.ts
+Lógica WA/notas: lib/whatsappCheckout.ts, Cart.tsx, Checkout.tsx, Gracias.tsx
+SEO build: vite.config.ts, public/robots.txt
+UX global: Layout.tsx, main.tsx, index.css, Nav.tsx, Footer.tsx, ProductDetails.tsx
+Tests: whatsappCheckout.test.ts
+
+
+Catálogo (/catalog)
+Carga inicial: skeleton (CatalogSkeleton) mientras se hace fetch a /data/catalog.json?v={versión} (mismo contenido que el JSON de código; simula el día que el catálogo venga de API/CDN).
+Pestañas por categoría + pestaña Todas; solo se muestran categorías que tengan productos.
+Búsqueda por nombre (filtro en cliente).
+useTransition: al cambiar categoría o búsqueda se aplica un overlay breve (pending) sobre la cuadrícula.
+Archivos: src/pages/Catalog.tsx, Catalog.module.css, src/components/CatalogSkeleton.*
+
+Datos versionados (catalog.json)
+Catálogo único en src/data/catalog.json con "version" y listas categories + products.
+src/data/products.ts importa ese JSON y exporta PRODUCTS, CATEGORIES, CATALOG_VERSION, tipos, TAG_LABELS, productImageUrls().
+pnpm run sync-catalog copia el JSON a public/data/catalog.json (el fetch del catálogo lo sirve en dev y en dist).
+prebuild ejecuta ese sync antes de cada pnpm build para no desalinear bundle y public/.
+Etiquetas en tarjetas
+Campo opcional tags: nuevo | sin-lactosa | mas-vendido → textos en español con TAG_LABELS.
+Sigue existiendo badge / badgeRust para la esquina (ej. creatina).
+Archivos: catalog.json, ProductCard.tsx, ProductCard.module.css
+
+Galería en ficha de producto
+Si hay gallery con varias URLs, se muestra imagen principal + miniaturas (tabs accesibles).
+“Añadir al carrito” usa la imagen activa (o la primera disponible).
+Archivo: ProductDetails.tsx (subcomponente ProductMedia con key={product.id} para reiniciar miniaturas al cambiar de producto).
+
+Páginas nuevas y 404
+/envios-pagos — plantilla de envíos y pagos (texto para que lo sustituyas).
+/autenticidad — plantilla de sellos y confianza.
+/* — NotFound con enlaces a inicio y catálogo.
+Rutas en App.tsx. Enlaces en Nav y Footer.
+
+Accesibilidad
+:focus-visible en index.css (anillo lima en teclado).
+.sr-only para texto solo para lectores de pantalla.
+En el carrito: role="status" + aria-live="polite" con resumen de cantidad y total.
+SEO al compilar
+El plugin en vite.config.ts lee src/data/catalog.json y genera sitemap.xml incluyendo /envios-pagos, /autenticidad y cada /product/:id.
+Netlify (preview / deploy)
+netlify.toml en la raíz del repo: base = Creafit, pnpm install && pnpm build, publish = dist, redirect SPA a index.html.
+Conecta el repo en Netlify y usa ese archivo como configuración.
+
+WhatsApp Business (texto, no código)
+Plantillas sugeridas en Creafit/docs/whatsapp-business-plantillas.txt para copiar en respuestas rápidas / ausencia.
+Imágenes de ejemplo: en catalog.json, productos 1 y 2 usan URLs de Unsplash para demostrar galería; puedes sustituirlas por tus propias rutas (/assets/...) cuando tengas archivos en public/.
+
+Mantenimiento del catálogo: edita src/data/catalog.json, sube "version" si quieres forzar recarga en clientes con caché agresivo, y ejecuta pnpm build (el prebuild sincroniza public/data/).

@@ -3,18 +3,21 @@ import Nav from './Nav';
 import Footer from './Footer';
 import Cart from './Cart';
 import Toast from './Toast';
+import FloatingWhatsApp from './FloatingWhatsApp';
+import CartSaveIndicator from './CartSaveIndicator';
 
 export default function Layout() {
   return (
     <>
       <Nav />
-      {/* Outlet renders the matched child route */}
       <main>
         <Outlet />
       </main>
       <Footer />
       <Cart />
       <Toast />
+      <FloatingWhatsApp />
+      <CartSaveIndicator />
     </>
   );
 }

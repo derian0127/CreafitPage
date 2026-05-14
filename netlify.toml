@@ -1,0 +1,10 @@
+[build]
+  base = "Creafit"
+  command = "pnpm install && pnpm build"
+  publish = "dist"
+
+# SPA (React Router): todas las rutas sirven index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

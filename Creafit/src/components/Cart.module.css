@@ -40,6 +40,7 @@
 .rm:hover { color: #ff5555; }
 
 .footer { padding: 1.4rem 1.5rem; border-top: 1px solid var(--wire); }
+.actions { display: flex; flex-direction: column; gap: .65rem; }
 .totalRow  { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.2rem; }
 .totalLbl  { font-family: var(--C); font-size: .7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
 .totalAmt  { font-family: var(--D); font-size: 2.2rem; }
@@ -51,3 +52,45 @@
 }
 .checkout:hover:not(:disabled) { background: var(--lime2); transform: translateY(-1px); }
 .checkout:disabled { opacity: .4; cursor: not-allowed; }
+
+.waBtn {
+  width: 100%; background: transparent; color: var(--lime); border: 2px solid var(--lime);
+  border-radius: var(--r); padding: .85rem; font-family: var(--C); font-size: .72rem;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+  font-weight: 700; transition: background .2s, color .2s, transform .2s;
+}
+.waBtn:hover:not(:disabled) { background: rgba(227,170,43,.12); transform: translateY(-1px); }
+.notesLabel {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--C);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.notesArea {
+  width: 100%;
+  min-height: 4rem;
+  margin-bottom: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  background: var(--ink3);
+  border: 1px solid var(--wire2);
+  border-radius: var(--r);
+  color: var(--white);
+  font-family: var(--B);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.notesArea::placeholder {
+  color: var(--muted);
+  opacity: 0.75;
+}
+
+.notesArea:focus {
+  outline: none;
+  border-color: var(--lime);
+}

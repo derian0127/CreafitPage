@@ -2,6 +2,19 @@
    MAIN.JS — CREAFIT
    ============================================================ */
 
+/* ── Configuration ───────────────────────────────────────── */
+const waMeta = document.querySelector('meta[name="creafit-whatsapp"]')?.getAttribute("content");
+const CONFIG = {
+  whatsappNumber: (waMeta && waMeta.trim()) || "573001557404",
+  currency: "COP",
+  locale: "es-CO"
+};
+
+/** Digits only — wa.me expects country + number without symbols */
+function whatsappDigits() {
+  return String(CONFIG.whatsappNumber).replace(/\D/g, "");
+}
+
 /* ── Marquee ─────────────────────────────────────────────── */
 (function initMarquee() {
   const words = [
@@ -20,11 +33,15 @@
 
 
 /* ── Cart ─────────────────────────────────────────────────── */
-let cart = [];
-let nextId = 1;
+let cart = JSON.parse(localStorage.getItem('creafit_cart')) || [];
+let nextId = cart.length ? Math.max(...cart.map(i => i.id)) + 1 : 1;
 
 /** Format number as Colombian peso string */
-const cop = n => '$' + n.toLocaleString('es-CO');
+const cop = n => '$' + n.toLocaleString(CONFIG.locale);
+
+function saveCart() {
+  localStorage.setItem('creafit_cart', JSON.stringify(cart));
+}
 
 function addToCart(name, price) {
   const existing = cart.find(i => i.name === name);
@@ -35,6 +52,7 @@ function addToCart(name, price) {
   }
   renderCart();
   updateBadge();
+  saveCart();
   showToast(`<strong>${name}</strong> añadido`);
 }
 
@@ -42,6 +60,21 @@ function removeFromCart(id) {
   cart = cart.filter(i => i.id !== id);
   renderCart();
   updateBadge();
+  saveCart();
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  
+  item.qty += delta;
+  if (item.qty <= 0) {
+    removeFromCart(id);
+  } else {
+    renderCart();
+    updateBadge();
+    saveCart();
+  }
 }
 
 function renderCart() {
@@ -73,14 +106,14 @@ function renderCart() {
           <polyline points="21 15 16 10 5 21"/>
         </svg>
       </div>
-      <div>
-        <div class="cname">
-          ${item.name}
-          ${item.qty > 1
-            ? `<span style="font-family:var(--B);font-size:.72rem;color:var(--muted)">×${item.qty}</span>`
-            : ''}
-        </div>
+      <div class="ci-info">
+        <div class="cname">${item.name}</div>
         <div class="cprice">${cop(item.price * item.qty)}</div>
+        <div class="cqty-ctrl">
+          <button onclick="changeQty(${item.id}, -1)">-</button>
+          <span>${item.qty}</span>
+          <button onclick="changeQty(${item.id}, 1)">+</button>
+        </div>
       </div>
       <button class="crm" onclick="removeFromCart(${item.id})">✕</button>
     `;
@@ -94,8 +127,36 @@ function updateBadge() {
   const badge = document.getElementById('bdg');
   if (!badge) return;
   const count = cart.reduce((sum, i) => sum + i.qty, 0);
+  
+  // Animation logic
+  if (count > parseInt(badge.textContent || 0)) {
+    badge.classList.remove('bump');
+    void badge.offsetWidth; // Trigger reflow
+    badge.classList.add('bump');
+  }
+
   badge.textContent = count;
   badge.classList.toggle('on', count > 0);
+}
+
+/* ── Floating Buttons Logic ───────────────────────────────── */
+window.addEventListener('scroll', () => {
+  const ftop = document.getElementById('ftop');
+  if (!ftop) return;
+  if (window.scrollY > 400) {
+    ftop.classList.add('on');
+  } else {
+    ftop.classList.remove('on');
+  }
+});
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function openWhatsApp() {
+  const url = `https://wa.me/${whatsappDigits()}?text=${encodeURIComponent("¡Hola CREAFIT! 👋 Tengo una consulta.")}`;
+  window.open(url, "_blank", "noopener,noreferrer");
 }
 
 function openCart() {
@@ -112,12 +173,34 @@ function closeCart() {
 
 function checkout() {
   if (!cart.length) {
-    showToast('Carrito vacío.');
+    showToast('El carrito está vacío.');
     return;
   }
-  showToast('Redirigiendo al pago…');
-  setTimeout(closeCart, 500);
+
+  let message = "¡Hola CREAFIT! 👋 Me gustaría realizar el siguiente pedido:\n\n";
+  let total = 0;
+
+  cart.forEach(item => {
+    const subtotal = item.price * item.qty;
+    total += subtotal;
+    message += `• ${item.name} x${item.qty} — ${cop(subtotal)}\n`;
+  });
+
+  message += `\n━━━━━━━━━━━━━━━\n*TOTAL: ${cop(total)}*\n━━━━━━━━━━━━━━━\n\n¿Me podrían confirmar disponibilidad y medios de pago?`;
+  message += "\n\n(Ref. web · utm_source=site&utm_medium=whatsapp&utm_campaign=landing-cart)";
+
+  const encodedMessage = encodeURIComponent(message);
+  const whatsappUrl = `https://wa.me/${whatsappDigits()}?text=${encodedMessage}`;
+
+  // Abrir en el mismo tick del click evita que el bloqueador de ventanas emergentes corte el open tras un setTimeout.
+  window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  closeCart();
+  showToast("Se abrió WhatsApp con tu pedido.");
 }
+
+// Initial render
+renderCart();
+updateBadge();
 
 document.getElementById('cartBtn')?.addEventListener('click', openCart);
 

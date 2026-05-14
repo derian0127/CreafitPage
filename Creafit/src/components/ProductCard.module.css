@@ -48,7 +48,26 @@
 .card:hover .quickAdd { transform: translateY(0); }
 
 .body  { padding: 1.2rem 1.2rem 1.4rem; flex: 1; display: flex; flex-direction: column; }
-.name  { font-family: var(--C); font-weight: 700; font-size: 1.3rem; letter-spacing: .5px; text-transform: uppercase; line-height: 1.1; margin-bottom: .5rem; }
+.name  { font-family: var(--C); font-weight: 700; font-size: 1.3rem; letter-spacing: .5px; text-transform: uppercase; line-height: 1.1; margin-bottom: .4rem; }
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin-bottom: .55rem;
+}
+.tag {
+  font-family: var(--C);
+  font-size: .55rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--lime);
+  border: 1px solid rgba(227, 170, 43, .45);
+  padding: .15rem .4rem;
+  border-radius: 2px;
+}
+
 .desc  { font-size: .78rem; color: var(--muted); line-height: 1.7; flex: 1; margin-bottom: 1.2rem; }
 .foot  { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--wire); padding-top: 1rem; }
 .price { font-family: var(--D); font-size: 1.7rem; line-height: 1; }
