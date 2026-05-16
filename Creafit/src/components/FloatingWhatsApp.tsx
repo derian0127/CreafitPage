@@ -1,3 +1,4 @@
+"use client";
 import { openWhatsAppConsult } from '../lib/whatsappCheckout';
 import styles from './FloatingWhatsApp.module.css';
 

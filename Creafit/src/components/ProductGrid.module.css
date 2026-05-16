@@ -1,4 +1,4 @@
 .section { padding: clamp(3rem,6vw,5rem) clamp(1.5rem,4vw,3.5rem); }
 .header  { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 3rem; }
 .tagline { font-size: .82rem; color: var(--muted); max-width: 260px; line-height: 1.7; }
-.grid    { display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: 1px; background: var(--wire); border: 1px solid var(--wire); }
+.grid    { display: grid; grid-template-columns: repeat(auto-fill,minmax(250px,1fr)); gap: 1px; background: var(--wire); border: 1px solid var(--wire); }

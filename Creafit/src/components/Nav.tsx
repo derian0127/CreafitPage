@@ -1,6 +1,7 @@
+"use client";
 import { useState, useEffect } from 'react';
 import { useCartStore } from '../store/cartStore';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { getHighContrast, toggleHighContrast } from '../lib/highContrast';
 import styles from './Nav.module.css';
 
@@ -10,6 +11,15 @@ export default function Nav() {
   const [highContrast, setHighContrast] = useState(getHighContrast);
   const { openCart } = useCartStore();
   const cartCount = useCartStore(s => s.items.reduce((a, i) => a + i.qty, 0));
+  const [showAdded, setShowAdded] = useState(false);
+
+  useEffect(() => {
+    if (cartCount > 0) {
+      setShowAdded(true);
+      const timer = setTimeout(() => setShowAdded(false), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [cartCount]);
 
   const toggleContrast = () => {
     setHighContrast(toggleHighContrast());
@@ -29,7 +39,7 @@ export default function Nav() {
 
   return (
     <header className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
-      <Link to="/" className={styles.logo}>CREA<span>FIT</span></Link>
+      <Link href="/" className={styles.logo}>CREA<span>FIT</span></Link>
 
       <ul className={`${styles.links} ${menuOpen ? styles.open : ''}`}>
         {['inicio','productos','beneficios','contacto'].map(id => (
@@ -41,13 +51,13 @@ export default function Nav() {
           </li>
         ))}
         <li>
-          <Link to="/catalog" onClick={() => setMenuOpen(false)}>Catálogo</Link>
+          <Link href="/catalog" onClick={() => setMenuOpen(false)}>Catálogo</Link>
         </li>
         <li>
-          <Link to="/envios-pagos" onClick={() => setMenuOpen(false)}>Envíos</Link>
+          <Link href="/envios-pagos" onClick={() => setMenuOpen(false)}>Envíos</Link>
         </li>
         <li>
-          <Link to="/autenticidad" onClick={() => setMenuOpen(false)}>Sellos</Link>
+          <Link href="/autenticidad" onClick={() => setMenuOpen(false)}>Sellos</Link>
         </li>
       </ul>
 
@@ -67,6 +77,7 @@ export default function Nav() {
             <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
           </svg>
           <span className={`${styles.badge} ${cartCount > 0 ? styles.on : ''}`}>{cartCount}</span>
+          {showAdded && <span className={styles.addedMsg}>¡Producto añadido al carrito!</span>}
         </button>
         <button
           className={styles.burger}

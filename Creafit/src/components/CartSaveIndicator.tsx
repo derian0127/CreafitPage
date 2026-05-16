@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useRef, useState } from 'react';
 import { useCartStore } from '../store/cartStore';
 import styles from './CartSaveIndicator.module.css';

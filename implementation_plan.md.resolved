@@ -1,0 +1,54 @@
+# Migración a Backend Real (Base de Datos + Autenticación)
+
+El objetivo de este plan es transformar la página de Creafit de un sitio estático (con datos en un archivo JSON) a una aplicación dinámica conectada a un backend real. Esto permitirá gestionar productos sin tocar código y habilitar registro de usuarios.
+
+## User Review Required
+
+> [!IMPORTANT]
+> Esta migración requiere configurar un servicio externo. La opción más recomendada, rápida y gratuita para empezar es **Supabase** (una alternativa Open Source a Firebase que usa PostgreSQL). Necesitaremos que crees una cuenta gratuita en Supabase para obtener las credenciales de conexión.
+
+## Open Questions
+
+> [!WARNING]
+> **Pregunta clave sobre el Framework:**
+> Actualmente la app usa **Vite + React** (que es una SPA o Single Page Application). Esto funciona excelente con Supabase. 
+> Sin embargo, si el **SEO** (aparecer en el primer lugar de Google) es una prioridad crítica para ti, lo ideal sería aprovechar este cambio de arquitectura para migrar el código a **Next.js**. Next.js permite Renderizado del Lado del Servidor (SSR), lo que hace que los bots de Google lean la página al instante.
+> **¿Prefieres que mantengamos Vite (más rápido de implementar) o aprovechamos de migrar a Next.js (mejor SEO pero requiere reestructurar más código)?**
+
+## Proposed Changes
+
+### 1. Configuración de Base de Datos (Supabase)
+Se crearán las siguientes tablas en Supabase para reemplazar el `catalog.json`:
+- `categories`: `id`, `name`, `order`
+- `products`: `id`, `name`, `desc`, `price`, `weight`, `servings`, `category_id`, `image_url`, `gallery_urls`, `badge`, `is_active`
+- `product_tags`: `id`, `product_id`, `tag` (ej. "nuevo", "mas-vendido")
+
+### 2. Integración en el Cliente (React)
+
+#### [NEW] `src/lib/supabaseClient.ts`
+Crear el cliente de conexión a la base de datos usando las variables de entorno `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`.
+
+#### [MODIFY] `src/pages/Catalog.tsx`
+Modificar la obtención de datos para hacer un *fetch* directamente a la tabla `products` de Supabase en lugar de leer el JSON local.
+
+#### [MODIFY] `src/pages/ProductDetails.tsx`
+Modificar para obtener los detalles de un solo producto consultando a Supabase por el ID del producto en la URL.
+
+### 3. Autenticación y Cuentas de Usuario (Fase 2)
+
+#### [NEW] `src/store/userStore.ts`
+Añadir estado global de usuario (Zustand) para saber si está logueado o no.
+
+#### [NEW] `src/components/AuthModal.tsx`
+Un modal o página para iniciar sesión / registrarse con Email o Google usando Supabase Auth.
+
+#### [NEW] `src/pages/Profile.tsx`
+Una vista de perfil donde el usuario pueda ver su historial de compras y direcciones guardadas (si se decide implementar el carrito full).
+
+## Verification Plan
+
+### Manual Verification
+1. Configurar un proyecto de prueba en Supabase e inyectar datos de prueba.
+2. Ejecutar la app localmente (`npm run dev`).
+3. Verificar que el catálogo carga correctamente los productos desde la nube en lugar del JSON.
+4. Probar la subida de un producto desde el panel de Supabase y ver que aparece inmediatamente en la web sin necesidad de compilar de nuevo.

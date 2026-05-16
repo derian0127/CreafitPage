@@ -1,0 +1,47 @@
+.wrap {
+  padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 4vw, 3rem);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.bar {
+  height: 1.1rem;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--ink3) 0%,
+    var(--wire2) 50%,
+    var(--ink3) 100%
+  );
+  background-size: 200% 100%;
+  animation: sk 1.1s ease-in-out infinite;
+  margin-bottom: 0.75rem;
+}
+
+.w60 { width: 60%; max-width: 320px; }
+.w40 { width: 40%; max-width: 200px; margin-bottom: 2rem; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  aspect-ratio: 3 / 4;
+  border-radius: var(--r);
+  border: 1px solid var(--wire);
+  background: linear-gradient(
+    120deg,
+    var(--ink2) 0%,
+    var(--ink3) 45%,
+    var(--ink2) 90%
+  );
+  background-size: 200% 100%;
+  animation: sk 1.2s ease-in-out infinite;
+}
+
+@keyframes sk {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}

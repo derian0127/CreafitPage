@@ -7,7 +7,7 @@ const DEFAULT_WHATSAPP = '573001557404';
 export const LAST_ORDER_NOTES_KEY = 'creafit_last_order_notes';
 
 export function getWhatsappDigits(): string {
-  const raw = import.meta.env.VITE_WHATSAPP_NUMBER as string | undefined;
+  const raw = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER as string | undefined;
   const fromEnv = raw?.replace(/\D/g, '') ?? '';
   return fromEnv || DEFAULT_WHATSAPP;
 }

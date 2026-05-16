@@ -1,0 +1,20 @@
+.trust {
+  background: var(--ink2); border-bottom: 1px solid var(--wire);
+  padding: clamp(2rem,4vw,3rem) clamp(1.5rem,4vw,3.5rem);
+}
+.grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 1px; background: var(--wire);
+  border: 1px solid var(--wire); border-radius: var(--r); overflow: hidden;
+}
+.item {
+  background: var(--ink2); padding: 1.5rem 1.2rem;
+  display: flex; align-items: center; gap: 1rem; transition: background .2s;
+}
+.item:hover { background: var(--ink3); }
+.ico { width: 40px; height: 40px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--lime); }
+.title { font-family: var(--C); font-weight: 600; font-size: .82rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+.sub   { font-size: .72rem; color: var(--muted); }
+
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }

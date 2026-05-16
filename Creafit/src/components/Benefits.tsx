@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import styles from './Benefits.module.css';
 
 const ITEMS = [
@@ -25,15 +26,13 @@ export default function Benefits() {
           ))}
         </div>
         <div className={styles.visual}>
-          {/* Coloca tu imagen: <img src="/benefits.jpg" alt="Atleta" /> */}
-          <div className={styles.ph}>
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth=".8">
-              <rect x="3" y="3" width="18" height="18" rx="2"/>
-              <circle cx="8.5" cy="8.5" r="1.5"/>
-              <polyline points="21 15 16 10 5 21"/>
-            </svg>
-            <p>Imagen de sección</p>
-          </div>
+          <Image 
+            src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80" 
+            alt="Entrenamiento CREAFIT" 
+            fill 
+            sizes="(max-width: 760px) 100vw, 40vw"
+            style={{ objectFit: 'cover' }}
+          />
           <div className={styles.deco}>CF</div>
         </div>
       </div>

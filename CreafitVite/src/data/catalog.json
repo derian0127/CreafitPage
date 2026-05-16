@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "categories": [
+    "PROTEINAS LIMPIAS",
+    "CREATINAS",
+    "PROTEINAS HIPERCALORICAS",
+    "PREENTRENOS",
+    "AMINOACIDOS",
+    "QUEMADORES",
+    "OTROS PRODUCTOS"
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Whey Pro Isolate",
+      "desc": "30 g de proteína ultra-pura por porción. Absorción rápida para recuperación muscular óptima post-entreno.",
+      "price": 89900,
+      "weight": "900 g",
+      "servings": 30,
+      "category": "PROTEINAS LIMPIAS",
+      "badge": "Bestseller",
+      "tags": ["mas-vendido", "sin-lactosa"],
+      "image": "https://images.unsplash.com/photo-1594381898411-846e7b193ebf?w=800&q=80",
+      "gallery": [
+        "https://images.unsplash.com/photo-1594381898411-846e7b193ebf?w=800&q=80",
+        "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
+        "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Creatina Mono HCL",
+      "desc": "Creatina micronizada Creapure® de máxima pureza. Aumenta fuerza explosiva y volumen muscular sostenido.",
+      "price": 54900,
+      "weight": "300 g",
+      "servings": 60,
+      "category": "CREATINAS",
+      "badge": "Nuevo",
+      "badgeRust": true,
+      "tags": ["nuevo"],
+      "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80",
+      "gallery": [
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80",
+        "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Ignite X-Pump",
+      "desc": "Cafeína anhidra, beta-alanina y L-citrulina en dosis efectivas. Energía, resistencia y pump máximos.",
+      "price": 72900,
+      "weight": "300 g",
+      "servings": 30,
+      "category": "PREENTRENOS",
+      "tags": ["mas-vendido"]
+    },
+    {
+      "id": 4,
+      "name": "BCAA EAA Fusion",
+      "desc": "Aminoácidos esenciales y ramificados en ratio 8:1:1 para anti-catabolismo y recuperación ultra-rápida.",
+      "price": 62900,
+      "weight": "400 g",
+      "servings": 40,
+      "category": "AMINOACIDOS",
+      "tags": ["sin-lactosa"]
+    },
+    {
+      "id": 5,
+      "name": "Mass Gainer Titan",
+      "desc": "Fórmula enriquecida con carbohidratos complejos y proteína concentrada para maximizar la fase de volumen.",
+      "price": 105900,
+      "weight": "2 Kg",
+      "servings": 25,
+      "category": "PROTEINAS HIPERCALORICAS",
+      "tags": ["nuevo"]
+    },
+    {
+      "id": 6,
+      "name": "Thermo Shred",
+      "desc": "Complejo termogénico de alta potencia. Aumenta el metabolismo y apoya la quema de grasa sin pérdida muscular.",
+      "price": 68900,
+      "weight": "60 cáp",
+      "servings": 30,
+      "category": "QUEMADORES"
+    },
+    {
+      "id": 7,
+      "name": "Omega 3 Elite",
+      "desc": "Aceite de pescado de alta pureza. Apoyo esencial para articulaciones, salud cardíaca y recuperación.",
+      "price": 45900,
+      "weight": "120 cáp",
+      "servings": 60,
+      "category": "OTROS PRODUCTOS",
+      "tags": ["sin-lactosa"]
+    }
+  ]
+}

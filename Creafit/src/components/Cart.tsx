@@ -1,5 +1,6 @@
+"use client";
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useCartStore, cop } from '../store/cartStore';
 import { openWhatsAppOrder } from '../lib/whatsappCheckout';
 import styles from './Cart.module.css';
@@ -12,12 +13,20 @@ export default function Cart() {
   const updateQty  = useCartStore(s => s.updateQty);
   const cartTotal  = useCartStore(s => s.items.reduce((sum, i) => sum + i.price * i.qty, 0));
   const cartCount  = useCartStore(s => s.items.reduce((sum, i) => sum + i.qty, 0));
-  const navigate   = useNavigate();
+  const router = useRouter();
   const [orderNotes, setOrderNotes] = useState('');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
+
+  if (!mounted) return null;
 
   return (
     <>
@@ -99,7 +108,7 @@ export default function Cart() {
                   notes: orderNotes,
                   afterOpen: () => {
                     closeCart();
-                    navigate('/gracias');
+                    router.push('/gracias');
                   },
                 })
               }
@@ -112,7 +121,7 @@ export default function Cart() {
               disabled={items.length === 0}
               onClick={() => {
                 closeCart();
-                navigate('/checkout');
+                router.push('/checkout');
               }}
             >
               Ir al checkout →

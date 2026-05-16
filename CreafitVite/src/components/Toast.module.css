@@ -1,0 +1,11 @@
+.toast {
+  position: fixed; bottom: 1.5rem; right: 1.5rem;
+  background: var(--ink3); border: 1px solid var(--wire2);
+  border-left: 3px solid var(--lime); color: var(--white);
+  padding: .75rem 1.2rem; border-radius: var(--r);
+  font-family: var(--C); font-size: .82rem; letter-spacing: .5px;
+  z-index: 300; transform: translateX(140%);
+  transition: transform .35s var(--ease); max-width: 280px;
+}
+.toast.on { transform: translateX(0); }
+.toast :global(strong) { color: var(--lime); }

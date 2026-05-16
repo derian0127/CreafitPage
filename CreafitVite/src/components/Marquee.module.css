@@ -1,0 +1,12 @@
+.wrap  { background: var(--lime); overflow: hidden; padding: .6rem 0; }
+.track {
+  display: flex; width: max-content;
+  animation: tick 24s linear infinite;
+}
+@keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.item {
+  font-family: var(--D); font-size: 1rem; letter-spacing: 3px; color: #000;
+  padding: 0 2.5rem; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 2.5rem;
+}
+.dot { width: 5px; height: 5px; background: #000; border-radius: 50%; flex-shrink: 0; }

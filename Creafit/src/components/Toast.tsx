@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useRef, useState } from 'react';
 import { setToastListener } from '../lib/toastBus';
 import styles from './Toast.module.css';

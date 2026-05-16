@@ -1,8 +1,11 @@
+"use client";
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import styles from './Footer.module.css';
 import { showToast } from '../lib/toastBus';
 import { toggleHighContrast } from '../lib/highContrast';
+
+import { supabase } from '@/lib/supabaseClient';
 
 const LINKS_PRODUCTS = ['Proteínas','Creatinas','Pre-entreno','Aminoácidos','Vitaminas'];
 const LINKS_INFO     = ['Sobre CREAFIT','Blog & Ciencia','Privacidad','Devoluciones','Términos'];
@@ -10,28 +13,35 @@ const SOCIALS        = [{ label: 'IG', aria: 'Instagram' },{ label: 'TK', aria: 
 
 export default function Footer() {
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const subscribe = (e: React.FormEvent) => {
+  const subscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.includes('@')) {
       showToast('Email inválido.');
       return;
     }
-    const formUrl = import.meta.env.VITE_NEWSLETTER_FORM_URL as string | undefined;
-    const contactEmail = import.meta.env.VITE_CONTACT_EMAIL as string | undefined;
+    
+    setLoading(true);
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
 
-    if (formUrl?.trim()) {
-      window.open(formUrl.trim(), '_blank', 'noopener,noreferrer');
-      showToast('Te abrimos el formulario de suscripción.');
-    } else if (contactEmail?.trim()) {
-      const subj = encodeURIComponent('Newsletter CREAFIT');
-      const body = encodeURIComponent(`Quiero suscribirme con este correo: ${email}`);
-      window.location.href = `mailto:${contactEmail.trim()}?subject=${subj}&body=${body}`;
-      showToast('Abriendo tu app de correo…');
-    } else {
-      showToast(`Gracias. Registramos: <strong>${email}</strong> (configura VITE_NEWSLETTER_FORM_URL o VITE_CONTACT_EMAIL para envío real).`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        showToast(data.error || 'Error al suscribirse.');
+      } else {
+        showToast(data.warning || '¡Bienvenido al arsenal! Revisa tu correo.');
+        setEmail('');
+      }
+    } catch (err) {
+      showToast('Error de conexión. Intenta de nuevo.');
     }
-    setEmail('');
+    setLoading(false);
   };
 
   return (
@@ -48,16 +58,17 @@ export default function Footer() {
         <div className={styles.col}>
           <h4>Productos</h4>
           <ul>
-            <li><Link to="/catalog">Ver catálogo</Link></li>
+            <li><Link href="/catalog">Ver catálogo</Link></li>
             {LINKS_PRODUCTS.map(l => <li key={l}><a href="#">{l}</a></li>)}
           </ul>
         </div>
         <div className={styles.col}>
           <h4>Información</h4>
           <ul>
-            <li><Link to="/catalog">Catálogo</Link></li>
-            <li><Link to="/envios-pagos">Envíos y pagos</Link></li>
-            <li><Link to="/autenticidad">Autenticidad</Link></li>
+            <li><Link href="/catalog">Catálogo</Link></li>
+            <li><Link href="/envios-pagos">Envíos y pagos</Link></li>
+            <li><Link href="/autenticidad">Autenticidad</Link></li>
+            <li><Link href="/admin">Panel Admin</Link></li>
             {LINKS_INFO.map(l => <li key={l}><a href="#">{l}</a></li>)}
           </ul>
         </div>
